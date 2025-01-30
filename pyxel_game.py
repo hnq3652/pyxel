@@ -3,18 +3,25 @@ import pyxel  #pyxelモジュールをインポートする
 PLAYER_SPEED = 2  #プレイヤーのスピードを定数にする
 
 def __init__():  #ゲームの初期設定をする関数を定義する
-    global player_x, player_y, enemy_x, enemy_y, player_alive  #全ての変数をグローバル化
     pyxel.init(160,120)  #ゲーム画面の縦、横の幅を決める
     pyxel.load('my_resource.pyxres')  #絵や音楽のデータを読み込む
+    reset()  ##全ての変数を初期化する(ゲームをリセットする)
+    pyxel.run(update, draw)  #動き(プレイヤーの座標など)の更新と、描画をし続ける
+
+def reset():
+    global player_x, player_y, enemy_x, enemy_y, player_alive  #全ての変数をグローバル化
     player_x, player_y = 0, 0  #ゲーム開始時の(プレイヤーのx座標,y座標)を(0,0)にする
     enemy_x, enemy_y = 100, 100  #ゲーム開始時の(敵のx座標,y座標)を(100,100)にする
     player_alive = True  #プレイヤーが生きているかのフラグ変数をTrue(生きている)にする
-    pyxel.run(update, draw)  #動き(プレイヤーの座標など)の更新と、描画をし続ける
 
 def update():  #動き(プレイヤーの座標など)の更新をする関数を定義する
-    update_player()  #プレイヤーの更新
-    update_enemy()  #敵の更新
-    check_collision()  #当たり判定
+    if player_alive:   #プレイヤーが生きているなら
+        update_player()  #プレイヤーの更新
+        update_enemy()  #敵の更新
+        check_collision()  #当たり判定
+    else:  #プレイヤーが死んでいるなら
+        if pyxel.btnp(pyxel.KEY_SPACE):  #スペースキーが押されたら
+            reset()  #全ての変数を初期化する(ゲームをリセットする)
 
 def update_player():
     global player_x, player_y  #プレイヤーのx座標、y座標をグローバル化

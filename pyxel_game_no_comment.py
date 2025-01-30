@@ -3,18 +3,25 @@ import pyxel
 PLAYER_SPEED = 2
 
 def __init__():
-    global player_x, player_y, enemy_x, enemy_y, player_alive
     pyxel.init(160,120)
     pyxel.load('my_resource.pyxres')
+    reset()
+    pyxel.run(update, draw)
+
+def reset():
+    global player_x, player_y, enemy_x, enemy_y, player_alive
     player_x, player_y = 0, 0
     enemy_x, enemy_y = 100, 100
     player_alive = True
-    pyxel.run(update, draw)
 
 def update():
-    update_player()
-    update_enemy()
-    check_collision()
+    if player_alive:
+        update_player()
+        update_enemy()
+        check_collision()
+    else:
+        if pyxel.btnp(pyxel.KEY_SPACE):
+            reset()
 
 def update_player():
     global player_x, player_y
